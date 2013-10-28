@@ -14,6 +14,20 @@
 
     returns undefined (array is sorted in place)
 */
+
+$(function(){
+    sortObjArray(Employees.entries, Employees.entries.last); 
+    render(Employees.entries); 
+
+    $('.sort-ui .btn').click(function(){
+        var sortBtn = $(this);
+        sortBtn.attr('data-sortby');
+
+        sortObjArray(Employees.entries, sortBtn); 
+        render(Employees.entries); 
+    });
+});
+
 function sortObjArray(objArray, propName) {
     if (!objArray.sort)
         throw new Error('The objArray parameter does not seem to be an array (no sort method)');
@@ -34,3 +48,23 @@ function sortObjArray(objArray, propName) {
     });
 } //sortObjArray()
 
+function render(entries) {
+    var temp = $(".template"); 
+    var contain = $(".address-book"); 
+    var instance; 
+    contain.empty(); 
+    $.each(entries, function(){
+        instance = temp.clone(); 
+        instance.find('.first').html(this.first); 
+        instance.find('.last').html(this.last); 
+        instance.find('.title').html(this.title); 
+        instance.find('.dept').html(this.dept); 
+        instance.find('.pic').attr({
+            src: this.pic, 
+            alt: 'Picture of ' + this.first + this.last
+        }); 
+
+        instance.removeClass("template"); 
+        contain.append(instance); 
+    });
+}
